@@ -1,27 +1,24 @@
 namespace Interval {
     use Util.sortPair;
 
+    /// An interval bound.
     pub enum Bound with Eq, Order {
         case NegInf
         case Number(BigInt)
         case PosInf
     }
 
-    def succ(b: Bound): Bound = match b {
-        case NegInf => NegInf
-        case Number(i) => Number(i + 1ii)
-        case PosInf => PosInf
-    }
-
+    /// A (possibly unbounded) integer interval.
     pub opaque type Interval with Eq, Order = (Bound, Bound)
 
+    /// The result of taking the union or intersection of two intervals.
     pub enum IntervalResult with Eq {
         case Cancelled
         case Single(Interval)
         case Sorted(Interval, Interval)
     }
 
-
+    /// Returns the union of two intervals.
     pub def union(i1: Interval, i2: Interval): IntervalResult = {
         let (i1Sorted, i2Sorted) = sortPair(i1, i2);
         let Interval(lo1, hi1) = i1Sorted;
@@ -45,6 +42,7 @@ namespace Interval {
 
     }
 
+    /// Returns the intersection of two intervals.
     pub def inter(i1: Interval, i2: Interval): IntervalResult = {
         let (i1Sorted, i2Sorted) = sortPair(i1, i2);
         let Interval(_lo1, hi1) = i1Sorted;
@@ -63,4 +61,13 @@ namespace Interval {
             Cancelled
         }
     }
+
+    /// Returns the successor of the bound,
+    /// or the bound if it is infinite.
+    def succ(b: Bound): Bound = match b {
+        case NegInf => NegInf
+        case Number(i) => Number(i + 1ii)
+        case PosInf => PosInf
+    }
+
 }
