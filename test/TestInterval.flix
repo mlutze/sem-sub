@@ -65,4 +65,49 @@ namespace TestInterval {
         )
         ==
         Single(Interval(Number(0ii), Number(5ii)))
+
+    @test
+    def testInter01(): Bool =
+        inter(
+            Interval(Number(0ii), Number(4ii)),
+            Interval(Number(2ii), Number(6ii))
+        )
+        ==
+        Single(Interval(Number(2ii), Number(4ii)))
+
+    @test
+    def testInter02(): Bool =
+        inter(
+            Interval(Number(0ii), Number(6ii)),
+            Interval(Number(2ii), Number(4ii))
+        )
+        ==
+        Single(Interval(Number(2ii), Number(4ii)))
+    
+    @test
+    def testInter03(): Bool =
+        inter(
+            Interval(Number(0ii), Number(2ii)),
+            Interval(Number(4ii), Number(6ii))
+        )
+        ==
+        Cancelled
+
+    @test
+    def testInter04(): Bool =
+        inter(
+            Interval(Number(4ii), Number(6ii)),
+            Interval(Number(0ii), Number(2ii))
+        )
+        ==
+        Cancelled
+    
+    @test
+    def testInter05(): Bool =
+        inter(
+            Interval(Number(0ii), Number(2ii)),
+            Interval(Number(3ii), Number(5ii))
+        )
+        ==
+        Cancelled
 }
