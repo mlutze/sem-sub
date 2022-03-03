@@ -9,7 +9,7 @@ namespace Interval {
 
     pub opaque type Interval with Eq, Order = (Bound, Bound)
 
-    pub enum IntervalResult {
+    pub enum IntervalResult with Eq {
         case Cancelled
         case Single(Interval)
         case Sorted(Interval, Interval)
