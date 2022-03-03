@@ -4,7 +4,7 @@ lawless class SemType[a] {
 
     // Constructors
     pub def tag(name: String): a
-    pub def range(lo: Option[BigInt], hi: Option[BigInt]): a
+    pub def range(lo: Interval.Bound, hi: Interval.Bound): a
     pub def arrow(t1: a, t2: a): a
     pub def prod(t1: a, t2: a): a
 
@@ -19,7 +19,10 @@ lawless class SemType[a] {
     pub def empty(): a = SemType.tnot(SemType.any())
     pub def anyProd(): a = SemType.prod(SemType.any(), SemType.any())
     pub def anyArrow(): a = SemType.arrow(SemType.any(), SemType.any())
-    pub def anyInt(): a = SemType.range(None, None)
+    pub def anyInt(): a = 
+        use Interval.Bound.NegInf;
+        use Interval.Bound.PosInf;
+        SemType.range(NegInf, PosInf)
     pub def anyTag(): a =
         use SemType.tor;
         SemType.tnot(
@@ -31,6 +34,6 @@ lawless class SemType[a] {
 }
 
 namespace SemType {
-    pub def --(lo: Option[BigInt], hi: Option[BigInt]): a with SemType[a] = SemType.range(lo, hi)
+    pub def --(lo: Interval.Bound, hi: Interval.Bound): a with SemType[a] = SemType.range(lo, hi)
     pub def -->(t1: a, t2: a): a with SemType[a] = SemType.arrow(t1, t2)
 }
