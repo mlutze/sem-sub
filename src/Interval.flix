@@ -7,6 +7,12 @@ namespace Interval {
         case PosInf
     }
 
+    def succ(b: Bound): Bound = match b {
+        case NegInf => NegInf
+        case Number(i) => Number(i + 1ii)
+        case PosInf => PosInf
+    }
+
     pub opaque type Interval with Eq, Order = (Bound, Bound)
 
     pub enum IntervalResult with Eq {
@@ -22,11 +28,12 @@ namespace Interval {
         let Interval(lo2, hi2) = i2Sorted;
         // We now know that lo1 <= lo2
 
-        // TODO: must handle adjacency case!
-
         // |---|
         //   |---|
-        if (hi1 >= lo2) { // we have an intersection
+        //   or
+        // |---|
+        //      |---|
+        if (succ(hi1) >= lo2) { // we have an intersection or adjacency
             let lo = lo1;
             let hi = Order.max(hi1, hi2);
             Single(Interval(lo, hi))

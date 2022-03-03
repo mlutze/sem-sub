@@ -56,4 +56,13 @@ namespace TestInterval {
             Interval(Number(0ii), Number(2ii)),
             Interval(Number(4ii), Number(6ii))
         )
+    
+    @test
+    def testUnion05(): Bool =
+        union(
+            Interval(Number(0ii), Number(2ii)),
+            Interval(Number(3ii), Number(5ii))
+        )
+        ==
+        Single(Interval(Number(0ii), Number(5ii)))
 }
