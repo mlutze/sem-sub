@@ -1,4 +1,13 @@
 namespace TypeImpl {
+    use Interval.Interval;
+    use Interval.Interval.Interval;
+    use Interval.Bound.NegInf;
+    use Interval.Bound.PosInf;
+    use Interval.Bound.Number;
+    use Interval.IntervalResult.Cancelled;
+    use Interval.IntervalResult.Single;
+    use Interval.IntervalResult.Sorted;
+
     pub opaque type TypeImpl[a] = {
         tags :: TagDnf,
         ints :: IntDnf,
@@ -12,14 +21,6 @@ namespace TypeImpl {
         // a negation of a union of tags
         case AllBut(Set[String])
     }
-
-    enum Bound with Eq, Order {
-        case NegInf
-        case Number(BigInt)
-        case PosInf
-    }
-
-    opaque type Interval with Eq, Order = (Bound, Bound)
 
     opaque type IntDnf = List[Interval]
 
@@ -78,7 +79,7 @@ namespace TypeImpl {
                 case Nil => i :: Nil
                 // Something on the stack. Merge it with the interval.
                 case hd :: tl =>
-                    match unionIntervals(hd, i) {
+                    match Interval.union(hd, i) {
                         case Cancelled => unreachable!()
                         // Merge successful. Push it onto the stack.
                         case Single(merged) => merged :: tl
@@ -104,7 +105,7 @@ namespace TypeImpl {
                 case Nil => i :: Nil
                 // Something on the stack. Merge it with the interval.
                 case hd :: tl =>
-                    match interIntervals(hd, i) {
+                    match Interval.inter(hd, i) {
                         // Disjoint intervals. Remove it from the stack.
                         case Cancelled => tl
                         // Merge successful. Push it onto the stack.
@@ -148,54 +149,4 @@ namespace TypeImpl {
         t1 `interInts` negInts(t2)
     }
 
-    enum IntervalResult {
-        case Cancelled
-        case Single(Interval)
-        case Sorted(Interval, Interval)
-    }
-
-    def sortPair(x: a, y: a): (a, a) with Order[a] = {
-        (Order.min(x, y), Order.max(x, y))
-    }
-
-    def unionIntervals(i1: Interval, i2: Interval): IntervalResult = {
-        let (i1Sorted, i2Sorted) = sortPair(i1, i2);
-        let Interval(lo1, hi1) = i1Sorted;
-        let Interval(lo2, hi2) = i2Sorted;
-        // We now know that lo1 <= lo2
-
-        // TODO: must handle adjacency case!
-
-        // |---|
-        //   |---|
-        if (hi1 >= lo2) { // we have an intersection
-            let lo = lo1;
-            let hi = Order.max(hi1, hi2);
-            Single(Interval(lo, hi))
-        // |---|
-        //       |---|
-        } else {
-            Sorted(i1Sorted, i2Sorted)
-        }
-
-    }
-
-    def interIntervals(i1: Interval, i2: Interval): IntervalResult = {
-        let (i1Sorted, i2Sorted) = sortPair(i1, i2);
-        let Interval(_lo1, hi1) = i1Sorted;
-        let Interval(lo2, hi2) = i2Sorted;
-        // We now know that lo1 <= lo2
-
-        // |---|
-        //   |---|
-        if (hi1 >= lo2) { // we have an intersection
-            let lo = lo2;
-            let hi = Order.min(hi1, hi2);
-            Single(Interval(lo, hi))
-        // |---|
-        //       |---|
-        } else {
-            Cancelled
-        }
-    }
 }
