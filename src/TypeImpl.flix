@@ -1,9 +1,9 @@
 namespace TypeImpl {
-    type alias TypeImpl[a] = {
+    pub opaque type TypeImpl[a] = {
         tags :: TagDnf,
         ints :: IntDnf,
-        prods :: Bdd.Bdd[a],
-        arrows :: Bdd.Bdd[a]
+        prods :: LazyBdd.LazyBdd[a],
+        arrows :: LazyBdd.LazyBdd[a]
     }
 
     enum TagDnf {
@@ -23,7 +23,7 @@ namespace TypeImpl {
 
     opaque type IntDnf = List[Interval]
 
-    def unionTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
+    pub def unionTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
         // {a, b} \/ {b, c} = {a, b, c}
         case (AllOf(set1), AllOf(set2)) => AllOf(set1 `Set.union` set2)
         // {a, b} \/ ~{b, c} = ~({b, c} \ {a, b}) = ~{c}
@@ -33,7 +33,7 @@ namespace TypeImpl {
         case (AllBut(set1), AllBut(set2)) => AllBut(set1 `Set.intersection` set2)
     }
 
-    def interTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
+    pub def interTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
         // {a, b} /\ {b, c} = {b}
         case (AllOf(set1), AllOf(set2)) => AllOf(set1 `Set.intersection` set2)
         // {a, b} /\ ~{b, c} = {a, b} \ {b, c} = {a}
@@ -43,7 +43,7 @@ namespace TypeImpl {
         case (AllBut(set1), AllBut(set2)) => AllBut(set1 `Set.union` set2)
     }
 
-    def diffTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
+    pub def diffTags(t1: TagDnf, t2: TagDnf): TagDnf = match (t1, t2) {
         // {a, b} \ {b, c} = {a}
         case (AllOf(set1), AllOf(set2)) => AllOf(set1 `Set.difference` set2)
         // {a, b} \ ~{b, c} = {a, b} /\ {b, c} = b
@@ -65,7 +65,7 @@ namespace TypeImpl {
             }
     }
 
-    def unionInts(t1: IntDnf, t2: IntDnf): IntDnf = {
+    pub def unionInts(t1: IntDnf, t2: IntDnf): IntDnf = {
         let IntDnf(is1) = t1;
         let IntDnf(is2) = t2;
         let is = merge(is1, is2);
@@ -91,7 +91,7 @@ namespace TypeImpl {
         IntDnf(List.reverse(unioned))
     }
 
-    def interInts(t1: IntDnf, t2: IntDnf): IntDnf = {
+    pub def interInts(t1: IntDnf, t2: IntDnf): IntDnf = {
         let IntDnf(is1) = t1;
         let IntDnf(is2) = t2;
         let is = merge(is1, is2);
@@ -144,7 +144,7 @@ namespace TypeImpl {
 
     }
 
-    def diffInts(t1: IntDnf, t2: IntDnf): IntDnf = {
+    pub def diffInts(t1: IntDnf, t2: IntDnf): IntDnf = {
         t1 `interInts` negInts(t2)
     }
 
