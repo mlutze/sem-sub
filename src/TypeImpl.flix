@@ -1,7 +1,7 @@
 namespace TypeImpl {
     type alias TypeImpl[a] = {
-        tags :: Bdd.Bdd[a],
-        ints :: Bdd.Bdd[a],
+        tags :: TagDnf,
+        ints :: IntDnf,
         prods :: Bdd.Bdd[a],
         arrows :: Bdd.Bdd[a]
     }
