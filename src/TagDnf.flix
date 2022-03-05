@@ -37,4 +37,24 @@ namespace TagDnf {
         // ~{a, b} \ ~{b, c} = ~{a, b}
         case (AllBut(set1), AllBut(set2)) => AllOf(set2 `Set.difference` set1)
     }
+
+    pub def negTags(t1: TagDnf): TagDnf = match t1 {
+        case AllOf(tags) => AllBut(tags)
+        case AllBut(tags) => AllOf(tags)
+    }
+
+    instance SetLike[TagDnf] {
+    
+        pub def union(x: TagDnf, y: TagDnf): TagDnf = unionTags(x, y)
+    
+        pub def empty(): TagDnf = AllOf(Set#{})
+    
+        pub def neg(x: TagDnf): TagDnf = negTags(x)
+
+        override pub def inter(x: TagDnf, y: TagDnf): TagDnf = interTags(x, y)
+
+        override pub def any(): TagDnf = AllBut(Set#{})
+    
+    }
+    
 }
