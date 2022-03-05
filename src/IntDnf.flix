@@ -94,4 +94,19 @@ namespace IntDnf {
     pub def diffInts(t1: IntDnf, t2: IntDnf): IntDnf = {
         t1 `interInts` negInts(t2)
     }
+
+    instance SetLike[IntDnf] {
+    
+        pub def union(x: IntDnf, y: IntDnf): IntDnf = unionInts(x, y)
+    
+        pub def empty(): IntDnf = IntDnf(Nil)
+    
+        pub def neg(x: IntDnf): IntDnf = negInts(x)
+
+        override pub def inter(x: IntDnf, y: IntDnf): IntDnf = interInts(x, y)
+
+        override pub def any(): IntDnf = IntDnf(Interval(NegInf, PosInf) :: Nil)
+    
+    }
+    
 }
