@@ -10,10 +10,10 @@ namespace TestInterval {
     use Interval.Interval;
     use Interval.Interval.Interval;
 
-    use Interval.IntervalResult;
-    use Interval.IntervalResult.Cancelled;
-    use Interval.IntervalResult.Single;
-    use Interval.IntervalResult.Sorted;
+    use Interval.InterResult.Empty;
+    use Interval.InterResult.Remaining;
+    use Interval.UnionResult.Merged;
+    use Interval.UnionResult.Sorted;
 
     @test
     def testUnion01(): Bool =
@@ -22,7 +22,7 @@ namespace TestInterval {
             Interval(Number(2ii), Number(6ii))
         )
         ==
-        Single(Interval(Number(0ii), Number(6ii)))
+        Merged(Interval(Number(0ii), Number(6ii)))
 
     @test
     def testUnion02(): Bool =
@@ -31,7 +31,7 @@ namespace TestInterval {
             Interval(Number(2ii), Number(4ii))
         )
         ==
-        Single(Interval(Number(0ii), Number(6ii)))
+        Merged(Interval(Number(0ii), Number(6ii)))
     
     @test
     def testUnion03(): Bool =
@@ -64,7 +64,7 @@ namespace TestInterval {
             Interval(Number(3ii), Number(5ii))
         )
         ==
-        Single(Interval(Number(0ii), Number(5ii)))
+        Merged(Interval(Number(0ii), Number(5ii)))
 
     @test
     def testInter01(): Bool =
@@ -73,7 +73,7 @@ namespace TestInterval {
             Interval(Number(2ii), Number(6ii))
         )
         ==
-        Single(Interval(Number(2ii), Number(4ii)))
+        Remaining(Interval(Number(2ii), Number(4ii)))
 
     @test
     def testInter02(): Bool =
@@ -82,7 +82,7 @@ namespace TestInterval {
             Interval(Number(2ii), Number(4ii))
         )
         ==
-        Single(Interval(Number(2ii), Number(4ii)))
+        Remaining(Interval(Number(2ii), Number(4ii)))
     
     @test
     def testInter03(): Bool =
@@ -91,7 +91,7 @@ namespace TestInterval {
             Interval(Number(4ii), Number(6ii))
         )
         ==
-        Cancelled
+        Empty
 
     @test
     def testInter04(): Bool =
@@ -100,7 +100,7 @@ namespace TestInterval {
             Interval(Number(0ii), Number(2ii))
         )
         ==
-        Cancelled
+        Empty
     
     @test
     def testInter05(): Bool =
@@ -109,5 +109,5 @@ namespace TestInterval {
             Interval(Number(3ii), Number(5ii))
         )
         ==
-        Cancelled
+        Empty
 }

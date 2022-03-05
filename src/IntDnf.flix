@@ -7,10 +7,10 @@ namespace IntDnf {
     use Interval.Bound.Number;
     use Interval.Bound.PosInf;
 
-    use Interval.IntervalResult;
-    use Interval.IntervalResult.Cancelled;
-    use Interval.IntervalResult.Single;
-    use Interval.IntervalResult.Sorted;
+    use Interval.InterResult.Empty;
+    use Interval.InterResult.Remaining;
+    use Interval.UnionResult.Merged;
+    use Interval.UnionResult.Sorted;
 
     pub opaque type IntDnf = List[Interval]
 
@@ -28,9 +28,8 @@ namespace IntDnf {
                 // Something on the stack. Merge it with the interval.
                 case hd :: tl =>
                     match Interval.union(hd, i) {
-                        case Cancelled => unreachable!()
                         // Merge successful. Push it onto the stack.
-                        case Single(merged) => merged :: tl
+                        case Merged(merged) => merged :: tl
                         // Merge failed. Push the parts separately onto the stack.
                         case Sorted(i1, i2) => i2 :: i1 :: tl
                     }
@@ -55,10 +54,9 @@ namespace IntDnf {
                 case hd :: tl =>
                     match Interval.inter(hd, i) {
                         // Disjoint intervals. Remove it from the stack.
-                        case Cancelled => tl
+                        case Empty => tl
                         // Merge successful. Push it onto the stack.
-                        case Single(merged) => merged :: tl
-                        case Sorted(_, _) => unreachable!()
+                        case Remaining(merged) => merged :: tl
                     }
 
             }
