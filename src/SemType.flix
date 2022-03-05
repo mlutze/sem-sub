@@ -1,4 +1,4 @@
-lawless class SemType[a] {
+lawless class SemType[a] with SetLike[a] {
     // Bottom type
     pub def empty(): a
 
@@ -8,26 +8,18 @@ lawless class SemType[a] {
     pub def arrow(t1: a, t2: a): a
     pub def prod(t1: a, t2: a): a
 
-    // Connectives
-    pub def tand(t1: a, t2: a): a
-    pub def tnot(t: a): a
-
     // Helpers
-    pub def tor(t1: a, t2: a): a = 
-        use SemType.tnot;
-        tnot(tnot(t1) `SemType.tand` tnot(t2))
-    pub def any(): a = SemType.tnot(SemType.empty())
-    pub def anyProd(): a = SemType.prod(SemType.any(), SemType.any())
-    pub def anyArrow(): a = SemType.arrow(SemType.any(), SemType.any())
+    pub def anyProd(): a = SemType.prod(SetLike.any(), SetLike.any())
+    pub def anyArrow(): a = SemType.arrow(SetLike.any(), SetLike.any())
     pub def anyInt(): a = 
         use Interval.Bound.NegInf;
         use Interval.Bound.PosInf;
         SemType.range(NegInf, PosInf)
     pub def anyTag(): a =
-        use SemType.tor;
-        SemType.tnot(
-            SemType.anyProd() `tor`
-            SemType.anyArrow() `tor`
+        use SetLike.union;
+        SetLike.neg(
+            SemType.anyProd() `union`
+            SemType.anyArrow() `union`
             SemType.anyInt()
         )
 

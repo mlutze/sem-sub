@@ -5,7 +5,7 @@ lawless class SetLike[a] {
     pub def empty(): a
 
     // Derived operations
-    pub def all(): a = SetLike.neg(SetLike.empty())
+    pub def any(): a = SetLike.neg(SetLike.empty())
     pub def inter(x: a, y: a): a =
         use SetLike.neg;
         use SetLike.union;
