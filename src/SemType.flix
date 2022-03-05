@@ -1,6 +1,6 @@
 lawless class SemType[a] {
-    // Top type
-    pub def any(): a
+    // Bottom type
+    pub def empty(): a
 
     // Constructors
     pub def tag(name: String): a
@@ -9,14 +9,14 @@ lawless class SemType[a] {
     pub def prod(t1: a, t2: a): a
 
     // Connectives
-    pub def tor(t1: a, t2: a): a
     pub def tand(t1: a, t2: a): a
     pub def tnot(t: a): a
 
-    // Op aliases
-
     // Helpers
-    pub def empty(): a = SemType.tnot(SemType.any())
+    pub def tor(t1: a, t2: a): a = 
+        use SemType.tnot;
+        tnot(tnot(t1) `SemType.tand` tnot(t2))
+    pub def any(): a = SemType.tnot(SemType.empty())
     pub def anyProd(): a = SemType.prod(SemType.any(), SemType.any())
     pub def anyArrow(): a = SemType.arrow(SemType.any(), SemType.any())
     pub def anyInt(): a = 
