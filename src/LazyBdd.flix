@@ -84,4 +84,23 @@ namespace LazyBdd {
     // simplifications:
     // ThenElse(_, True, _) => True
     // ThenElse(_, then1, _, else1) if then1 == else1 => B \/ C
+
+    instance SetLike[LazyBdd[a]] with Order[a] {
+    
+        pub def union(x: LazyBdd[a], y: LazyBdd[a]): LazyBdd[a] = union(x, y)
+    
+        pub def empty(): LazyBdd[a] = False
+    
+        pub def isEmpty(x: LazyBdd[a]): Bool = ???
+    
+        pub def neg(x: LazyBdd[a]): LazyBdd[a] = True `diff` x
+
+        override pub def any(): LazyBdd[a] = True
+
+        override pub def inter(x: LazyBdd[a], y: LazyBdd[a]): LazyBdd[a] = inter(x, y)
+
+        override pub def diff(x: LazyBdd[a], y: LazyBdd[a]): LazyBdd[a] = diff(x, y)
+    
+    }
+    
 }
