@@ -103,9 +103,16 @@ namespace IntDnf {
     
         pub def neg(x: IntDnf): IntDnf = negInts(x)
 
+        pub def isEmpty(x: IntDnf): Bool = match x {
+            case IntDnf(Nil) => true
+            case IntDnf(_ :: _) => false
+        }
+
         override pub def inter(x: IntDnf, y: IntDnf): IntDnf = interInts(x, y)
 
         override pub def any(): IntDnf = IntDnf(Interval(NegInf, PosInf) :: Nil)
+
+        override pub def diff(x: IntDnf, y: IntDnf): IntDnf = diffInts(x, y)
     
     }
     

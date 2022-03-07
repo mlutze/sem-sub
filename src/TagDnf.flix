@@ -48,7 +48,12 @@ namespace TagDnf {
         pub def union(x: TagDnf, y: TagDnf): TagDnf = unionTags(x, y)
     
         pub def empty(): TagDnf = AllOf(Set#{})
-    
+
+        pub def isEmpty(x: TagDnf): Bool = match x {
+            case AllOf(tags) => Set.isEmpty(tags)
+            case AllBut(_) => false
+        }
+        
         pub def neg(x: TagDnf): TagDnf = negTags(x)
 
         override pub def inter(x: TagDnf, y: TagDnf): TagDnf = interTags(x, y)

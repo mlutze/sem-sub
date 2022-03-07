@@ -22,7 +22,6 @@ lawless class SemType[a] with SetLike[a] {
             SemType.anyArrow() `union`
             SemType.anyInt()
         )
-
 }
 
 namespace SemType {
