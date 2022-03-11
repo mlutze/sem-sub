@@ -6,6 +6,11 @@ namespace Bdd {
         case True
     }
 
+    pub enum Sign {
+        case Negative
+        case Positive
+    }
+
     pub def union(bdd1: Bdd[a], bdd2: Bdd[a]): Bdd[a] with Order[a] = match (bdd1, bdd2) {
         case (True, _) => True
         case (_, True) => True
@@ -50,4 +55,29 @@ namespace Bdd {
                 ThenElse(a2, diff(bdd1, then2), diff(bdd1, else2))
             }
     }
+
+
+    // TODO get both at the same time
+    pub def getTrueSets(bdd0: Bdd[a]): List[List[(Sign, a)]] = {
+        def loop(bdd, path) = match bdd {
+            case True => (path) :: Nil
+            case False => Nil
+            case ThenElse(a, then, else_) =>
+                loop(then, (Positive, a) :: path) :::
+                loop(else_, (Negative, a) :: path)
+        };
+        loop(bdd0, Nil): & Pure
+    }
+
+    pub def getFalseSets(bdd0: Bdd[a]): List[List[(Sign, a)]] = {
+        def loop(bdd, path) = match bdd {
+            case True => (path) :: Nil
+            case False => Nil
+            case ThenElse(a, then, else_) =>
+                loop(then, (Positive, a) :: path) :::
+                loop(else_, (Negative, a) :: path)
+        };
+        loop(bdd0, Nil): & Pure
+    }
+
 }
