@@ -8,15 +8,14 @@ namespace TypeImpl {
     use Interval.IntervalResult.Single;
     use Interval.IntervalResult.Sorted;
 
+    use Indexed.Indexed;
+    use Uuid.Uuid;
+
     use IntDnf.IntDnf;
 
     use TagDnf.TagDnf;
 
-    /// pub enum Atom {
-    ///     case Interval(IntDnf)
-    ///     case Prod(TypeImpl, TypeImpl)
-    ///     case Arrow(TypeImpl, TypeImpl)
-    /// }
+    type alias Atom = Indexed[Uuid, TypeImpl]
 
     pub opaque type TypeImpl = {
         tags :: TagDnf,
