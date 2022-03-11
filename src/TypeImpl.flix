@@ -24,26 +24,40 @@ namespace TypeImpl {
         arrows :: LazyBdd.LazyBdd[Atom]
     }
 
-    /// instance SetLike[TypeImpl] {
+    instance SetLike[TypeImpl] {
     
-    ///     pub def union(x: TypeImpl, y: TypeImpl): TypeImpl =
-    ///         let TypeImpl(rx) = x;
-    ///         let TypeImpl(ry) = y;
-    ///         let rz = {
-    ///             tags = SetLike.union(rx.tags, ry.tags),
-    ///             ints = SetLike.union(rx.ints, ry.ints),
-    ///             prods = SetLike.union(rx.prods, ry.prods),
-    ///             arrows = SetLike.union(rx.arrows, ry.arrows)
-    ///         };
-    ///         TypeImpl(rz)
+        pub def union(x: TypeImpl, y: TypeImpl): TypeImpl =
+            let TypeImpl(rx) = x;
+            let TypeImpl(ry) = y;
+            let rz = {
+                tags = SetLike.union(rx.tags, ry.tags),
+                ints = SetLike.union(rx.ints, ry.ints),
+                prods = SetLike.union(rx.prods, ry.prods),
+                arrows = SetLike.union(rx.arrows, ry.arrows)
+            };
+            TypeImpl(rz)
     
-    ///     pub def empty(): TypeImpl = ???
+        pub def empty(): TypeImpl =
+            let tpes = {
+                tags = SetLike.empty(),
+                ints = SetLike.empty(),
+                prods = SetLike.empty(),
+                arrows = SetLike.empty()
+            };
+            TypeImpl(tpes)
     
-    ///     pub def isEmpty(x: TypeImpl): Bool = ???
+        pub def isEmpty(x: TypeImpl): Bool = ???
     
-    ///     pub def neg(x: TypeImpl): TypeImpl = ???
-    
-    /// }
+        pub def neg(x: TypeImpl): TypeImpl =
+            let TypeImpl(tpes0) = x;
+            let tpes = {
+                tags = SetLike.neg(tpes0.tags),
+                ints = SetLike.neg(tpes0.ints),
+                prods = SetLike.neg(tpes0.prods),
+                arrows = SetLike.neg(tpes0.arrows)
+            };
+            TypeImpl(tpes)
+    }
     
 
 }
