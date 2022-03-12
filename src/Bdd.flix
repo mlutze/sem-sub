@@ -1,14 +1,17 @@
 namespace Bdd {
 
+    use Dnf.Conjunction;
+    use Dnf.Disjunction;
+    use Dnf.Dnf.Dnf;
+    use Dnf.Dnf;
+    use Dnf.Literal.Neg;
+    use Dnf.Literal.Pos;
+    use Dnf.Literal;
+
     pub enum Bdd[a] {
         case False
         case ThenElse(a, Bdd[a], Bdd[a])
         case True
-    }
-
-    pub enum Sign {
-        case Negative
-        case Positive
     }
 
     pub def union(bdd1: Bdd[a], bdd2: Bdd[a]): Bdd[a] with Order[a] = match (bdd1, bdd2) {
@@ -57,27 +60,15 @@ namespace Bdd {
     }
 
 
-    // TODO get both at the same time
-    pub def getTrueSets(bdd0: Bdd[a]): List[List[(Sign, a)]] = {
+    /// Converts the BDD into disjunctive normal form,
+    pub def toDnf(bdd0: Bdd[a]): Dnf[a] = {
         def loop(bdd, path) = match bdd {
             case True => (path) :: Nil
             case False => Nil
             case ThenElse(a, then, else_) =>
-                loop(then, (Positive, a) :: path) :::
-                loop(else_, (Negative, a) :: path)
+                loop(then, Pos(a) :: path) :::
+                loop(else_, Neg(a) :: path)
         };
-        loop(bdd0, Nil): & Pure
+        Dnf(loop(bdd0, Nil)): & Pure
     }
-
-    pub def getFalseSets(bdd0: Bdd[a]): List[List[(Sign, a)]] = {
-        def loop(bdd, path) = match bdd {
-            case True => (path) :: Nil
-            case False => Nil
-            case ThenElse(a, then, else_) =>
-                loop(then, (Positive, a) :: path) :::
-                loop(else_, (Negative, a) :: path)
-        };
-        loop(bdd0, Nil): & Pure
-    }
-
 }
