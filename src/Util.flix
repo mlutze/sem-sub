@@ -14,4 +14,27 @@ namespace Util {
             }
     }
 
+    pub def tails(l: List[a]): List[List[a]] = {
+        let rest = match l {
+            case Nil => Nil
+            case _ :: tl => tails(tl)
+        };
+        l :: rest
+    }
+
+    pub def inits(l: List[a]): List[List[a]] = {
+        let rest = match List.init(l) {
+            case None => Nil
+            case Some(init) => inits(init)
+        };
+        l :: rest
+    }
+
+    pub def sublists(l: List[a]): List[List[a]] = {
+        let nonEmpty = inits(l)
+            |> List.flatMap(tails)
+            |> List.filter(List.isEmpty >> Bool.not);
+        nonEmpty ++ (Nil :: Nil)
+    }
+
 }
