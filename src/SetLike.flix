@@ -1,4 +1,4 @@
-lawless class SetLike[a] {
+class SetLike[a] {
     // Base operations
     pub def union(x: a, y: a): a
     pub def neg(x: a): a

@@ -1,4 +1,4 @@
-lawless class SemType[a] with SetLike[a] {
+class SemType[a] with SetLike[a] {
     // Bottom type
     pub def empty(): a
 

@@ -1,7 +1,6 @@
 // The main entry point.
-def main(_args: Array[String]): Int32 & Impure =
-    println("Hello World!");
-    0 // exit code
+def main(): Unit & Impure =
+    println("Hello World!")
 
 enum Atom with Eq {
     case Tag(String)
